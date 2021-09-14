@@ -1,0 +1,59 @@
+<form *ngIf="!go">
+  <div class="form-group">
+    <label for=""></label>
+    <div class="form-group">
+      <label for="money">Money</label>
+      <select class="form-control col-4" id="make" name="money" [(ngModel)]="selectedMoney"
+              aria-placeholder="Please Insert Your Money">
+        <option *ngFor="let m of moneyValues" value="{{ m }}">{{ m }}</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" type="button" [disabled]="!selectedMoney" (click)="updateMoney()">Go</button>
+  </div>
+</form>
+<div *ngIf="go">
+  <div *ngIf="!checked">
+    <p>Your Money : {{currentMoney}}</p>
+    <button style="margin: 10px;" class="btn btn-primary" type="button" (click)="go=false">Insert Again</button>
+    <button class="btn btn-warning" type="button" (click)="cancel();">Cancel</button>
+    <table class='table table-striped' aria-labelledby="tableLabel">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let food of foods; let i=index">
+          <td>{{ i+1 }}</td>
+          <td>{{ food.name }}</td>
+          <td>{{ food.price }}</td>
+          <td>{{ food.stock }}</td>
+          <td>
+            <button class="btn btn-sm btn-{{food.stock < 1 ? 'warning' : 'primary'}}" type="button"
+                    [disabled]="food.price > currentMoney || food.stock < 1 "
+                    (click)="checkout(food.id)">
+              {{food.stock < 1 ? 'Out Of Stock' : 'Checkout' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="checked">
+    <table class='table table-striped' aria-labelledby="tableLabel">
+      <tr>
+        <th>You Purchase</th>
+        <td>{{selectedFood}}</td>
+      </tr>
+      <tr>
+        <th>The rest of your money</th>
+        <td>{{remainingMoney}}</td>
+      </tr>
+    </table>
+    <button class="btn btn-primary" type="button" (click)="done()">Done</button>
+  </div>
+</div>
